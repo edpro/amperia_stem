@@ -1,0 +1,63 @@
+name: Validate library
+
+on:
+  workflow_dispatch:
+    inputs:
+      core-version:
+        description: Arduino Renesas core version
+        required: true
+        default: "1.5.2"
+        type: string
+  release:
+    types:
+      - published
+  create:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: validate-library-${{ github.event.release.tag_name || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    if: github.event_name != 'create' || github.event.ref_type == 'tag'
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Arduino CLI
+        uses: arduino/setup-arduino-cli@v2
+        with:
+          version: "1.x"
+
+      - name: Install Arduino Renesas core
+        env:
+          CORE_VERSION: ${{ inputs.core-version || '1.5.2' }}
+        run: |
+          arduino-cli core update-index
+          arduino-cli core install "arduino:renesas_uno@${CORE_VERSION}"
+
+      - name: Install Arduino Lint
+        run: |
+          mkdir -p "$HOME/bin"
+          curl -fsSL             https://raw.githubusercontent.com/arduino/arduino-lint/main/etc/install.sh |
+            BINDIR="$HOME/bin" sh
+          echo "$HOME/bin" >> "$GITHUB_PATH"
+
+      - name: Validate library
+        run: ./scripts/validate-library.sh --install-deps
+
+      - name: Package Arduino IDE library
+        run: ./scripts/package-library.sh
+
+      - name: Upload Arduino IDE package
+        uses: actions/upload-artifact@v4
+        with:
+          name: AmperiaSTEM-Arduino-IDE
+          path: dist/AmperiaSTEM-*.zip
+          if-no-files-found: error
