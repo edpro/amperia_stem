@@ -43,6 +43,9 @@
 constexpr uint8_t temperatureSensorPin = A1;
 constexpr uint32_t measurementPeriodMs = 1500;
 
+// Використання сторонньої бібліотеки DHT для зчитування температури.
+
+// Use the third-party DHT library to read temperature.
 #define DHTTYPE DHT11
 DHT dht(temperatureSensorPin, DHTTYPE);
 
@@ -51,7 +54,6 @@ SimpleSensor amperiaTemperature(
     "Temperature",
     "C"
 );
-
 
 void setup()
 {

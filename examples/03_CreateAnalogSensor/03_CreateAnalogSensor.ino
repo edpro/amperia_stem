@@ -29,6 +29,9 @@ constexpr uint8_t sensorPin = A0;
 constexpr uint32_t measurementPeriodMs = 160;
 constexpr float adcMaximum = 4095.0f;
 
+// Створення власного сенсора з аналоговим виходом. Параметри конструктора:
+
+// Creating a custom sensor with an analog output. Constructor parameters:
 SimpleSensor analogSensor(
     "Student sensor",
     "Analog level",
@@ -60,6 +63,11 @@ void loop()
     const int rawValue = analogRead(sensorPin);
     const float levelPercent = 100.0f * rawValue / adcMaximum;
 
+    // Функція для переждачення значення в мультиметр. publish() автоматично додає
+    // мітку часу millis().
+
+    // Function to publish the value to the multimeter. publish() automatically adds
+    // a timestamp using millis().
     analogSensor.publish(levelPercent);
 
     Serial.print("Analog level: ");

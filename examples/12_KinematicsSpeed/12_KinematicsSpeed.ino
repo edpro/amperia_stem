@@ -1,31 +1,39 @@
 /*
  * ============================================================
- *  AmperiaSTEM — 12_KinematicsSpeed
- *  Кінематика: Обчислення швидкості.
- *  Читаємо час прольоту з фотоворіт EdPro, обчислюємо швидкість 
- *  і відправляємо на мультиметр як новий віртуальний сенсор.
- *  Kinematics: speed calculation.
- *  Read travel time from the EdPro gate sensor, calculate speed,
- *  and expose the result as a new virtual sensor.
+ *  AmperiaSTEM — KINEMATICS SPEED
+ *
+ *  Читаємо час прольоту з фотоворіт EdPro, обчислюємо швидкість
+ *  і передаємо її як новий віртуальний сенсор на Amperia Multimeter.
+ *
+ *  Read the travel time from the EdPro gate sensor, calculate speed,
+ *  and expose it as a new virtual sensor on the Amperia Multimeter.
+ *
+ *  Обладнання для проведення експерименту:
+ *  - Arduino UNO R4 WiFi і EdPro Amperia Shield (зібрані разом)
+ *  - EdPro Gate Sensor (фотоворота, підключені через роз'єм SENSOR)
+ *  - Об'єкт, що перетинає ворота, наприклад кулька або пластина
+ *  - Amperia Multimeter (підключений до EdPro Amperia Shield через
+ *    роз'єм MULTIMETER)
+ *
+ *  Equipment used in this example:
+ *  - Arduino UNO R4 WiFi with EdPro Amperia Shield
+ *  - EdPro Gate Sensor connected to the shield's SENSOR connector
+ *  - Object crossing the gate, such as a ball or plate
+ *  - Amperia Multimeter connected to the shield's MULTIMETER connector
  * ============================================================
  */
 
 #include <AmperiaSTEM.h>
 
-// Константа: довжина об'єкта (наприклад, кульки), що перетинає ворота, у метрах.
-// 0.05 м = 5 см.
-// Length of the object crossing the gate, in meters.
-// 0.05 m = 5 cm.
-constexpr float objectDistance = 0.05; 
+// Довжина об'єкта, що перетинає ворота, у метрах.
 
-/*
- * ============================================================
- * ОГОЛОШЕННЯ ОБ'ЄКТІВ
- * OBJECT DECLARATIONS
- * ============================================================
- */
-AmperiaSensorClient sensors;            // Читання фотоворіт з EdPro Sensor
-                                        // Reads the EdPro gate sensor
+// Length of the object crossing the gate, in meters.
+
+constexpr float objectDistance = 0.05; // 0.05 м = 5 см
+
+                                      // 0.05 m = 5 cm
+
+AmperiaSensorClient sensors;
 
 SimpleSensor speedSensor(
     "Kinematics",
@@ -33,117 +41,80 @@ SimpleSensor speedSensor(
     "m/s"
 );
 
-/*
- * ============================================================
- * ДОПОМІЖНІ ФУНКЦІЇ
- * HELPER FUNCTIONS
- *
- * Конкретна назва логічного сенсора фотоворіт залишається
- * в цьому прикладі, а не в універсальному класі бібліотеки.
- * The gate sensor's logical-sensor name belongs to this example
- * rather than the generic library client.
- * ============================================================
- */
 float getTravelTime()
 {
     auto* sensor = sensors.findSensor("Travel (S)");
 
     if (sensor == nullptr) {
-        return -1000.0f; // Від'ємний час прольоту є неможливим
+        return -1000.0f; // Сигнальне значення: від'ємний час прольоту неможливий
+
                          // Sentinel value: a negative travel time is impossible
     }
 
     return sensor->value();
 }
 
-/*
- * ============================================================
- * ТВОЯ ЛОГІКА ВИМІРЮВАНЬ
- * MEASUREMENT LOGIC
- * ============================================================
- */
-bool doMeasurement() 
+bool doMeasurement()
 {
-    // Отримуємо час прольоту між воротами (в секундах).
+    // Отримуємо час прольоту між воротами в секундах.
+
     // Read the travel time in seconds.
     float travelTime = getTravelTime();
 
-    // Захист від ділення на нуль та обробка лише валідних вимірювань.
+    // Захист від ділення на нуль і обробка лише валідних вимірювань.
+
     // Avoid division by zero and process only valid measurements.
     if (travelTime > 0.0) {
 
-        // Обчислення швидкості: v = d / t.
-        // Calculate speed: v = d / t.
+        // Обчислюємо швидкість за формулою v = d / t.
+
+        // Calculate speed using v = d / t.
         float speed = objectDistance / travelTime;
 
-        // Публікуємо значення нашого віртуального сенсора.
-        // Publish the virtual speed sensor.
         speedSensor.publish(speed);
 
-        // Вивід у Serial Monitor для зручності.
-        // Print the result to Serial Monitor.
-        Serial.print("Час прольоту: "); 
-        Serial.print(travelTime, 4); 
-        Serial.print(" с | Швидкість: ");
+        Serial.print("Travel time: ");
+        Serial.print(travelTime, 4);
+        Serial.print(" s | Speed: ");
         Serial.print(speed, 4);
-        Serial.println(" м/с");
+        Serial.println(" m/s");
     }
 
     return true;
 }
 
-/*
- * ============================================================
- *  SETUP 
- * ============================================================
- */
-void setup() {
+void setup()
+{
     Serial.begin(115200);
     delay(1000);
     Serial.println("Starting Amperia STEM Framework...");
 
-    // Ініціалізуємо читання фотоворіт.
-    // Initialize the gate-sensor interface.
     if (!sensors.begin()) {
         Serial.println("Failed to start the Amperia STEM sensor.");
         return;
     }
 
-    // Даємо зовнішньому сенсору час завершити запуск.
-    // Give the external sensor time to finish startup.
     delay(5000);
 
-    // Зчитуємо опис сенсорів і перевіряємо наявність часу прольоту.
-    // Discover sensor metadata and verify that travel time is available.
     if (!sensors.discover() || sensors.findSensor("Travel (S)") == nullptr) {
         Serial.println("Gate timing sensor was not detected.");
         return;
     }
 
-    // Ініціалізуємо власний сенсор швидкості.
-    // Initialize the custom speed sensor.
     if (!speedSensor.begin()) {
-        Serial.println("Помилка ініціалізації SimpleSensor!");
+        Serial.println("Failed to initialize the SimpleSensor.");
         return;
     }
 
-    // Одразу опрацьовуємо перше доступне вимірювання.
-    // Process the first available measurement immediately.
     if (sensors.update()) {
         doMeasurement();
     }
 
-    Serial.println("System Ready! Waiting for object to pass through the gates...");
+    Serial.println("System Ready! Waiting for an object to pass through the gate...");
 }
 
-/*
- * ============================================================
- *  LOOP 
- * ============================================================
- */
-void loop() {
-    // Нове вимірювання обробляємо після сигналу DREADY від фотоворіт.
-    // Process a new measurement after the gate sensor asserts DREADY.
+void loop()
+{
     if (sensors.updateIfReady()) {
         doMeasurement();
     }

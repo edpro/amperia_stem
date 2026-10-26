@@ -59,6 +59,8 @@ void setup()
         return;
     }
 
+    // Деяким зовнішнім датчикам EdPro потрібен час, щоб завершити власний запуск.
+
     // Some external EdPro sensors need time to finish their own startup.
     delay(5000);
 
@@ -77,6 +79,9 @@ void setup()
 
 void loop()
 {
+    // Метадані виявляються після setup(). Оновлення update() або
+    // updateIfReady(), коли потрібні значення вимірювань.
+
     // Metadata is discovered once in setup(). Call update() or
     // updateIfReady() when measurement values are needed.
 }

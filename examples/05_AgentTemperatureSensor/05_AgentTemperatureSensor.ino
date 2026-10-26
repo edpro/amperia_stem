@@ -48,6 +48,9 @@ constexpr uint32_t measurementPeriodMs = 1500;
 #define DHTTYPE DHT11
 DHT dht(temperatureSensorPin, DHTTYPE);
 
+// AgentSensor викликає цю функцію з measure() або measureAndPublish().
+// Повертає false, щоб зберегти попереднє значення та уникнути імпульсу DREADY.
+
 // AgentSensor calls this function from measure() or measureAndPublish().
 // Return false to keep the previous value and avoid a DREADY pulse.
 bool readTemperature(float& temperatureC)
