@@ -43,7 +43,7 @@ SimpleSensor speedSensor(
 
 float getTravelTime()
 {
-    auto* sensor = sensors.findSensor("Travel (S)");
+    auto* sensor = sensors.findSensor("Travel(S)");
 
     if (sensor == nullptr) {
         return -1000.0f; // Сигнальне значення: від'ємний час прольоту неможливий
