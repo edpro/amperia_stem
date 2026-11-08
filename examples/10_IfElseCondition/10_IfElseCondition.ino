@@ -13,13 +13,18 @@
  *  - EdPro CO2 Sensor (підключений до EdPro Amperia Shield через
  *    роз'єм SENSOR)
  *  - LED: один контакт до A0, інший до GND
+ *  - Перед підключенням переконайтеся, що перемичка A0 на платі 
+ *    EdPro Amperia Shield встановлена в положення 620.
  *  - Amperia Multimeter (підключений до EdPro Amperia Shield через
  *    роз'єм MULTIMETER)
- *
+ *  
+ * 
  *  Equipment used in this example:
  *  - Arduino UNO R4 WiFi with EdPro Amperia Shield
  *  - EdPro CO2 Sensor connected to the shield's SENSOR connector
  *  - LED: one lead to A0, the other to GND
+ *  - Before connecting the LED, make sure that the A0 jumper on the
+ *  - EdPro Amperia Shield is set to the 620 position.
  *  - Amperia Multimeter connected to the shield's MULTIMETER connector
  * ============================================================
  */

@@ -66,6 +66,13 @@ void setup()
     Wire.begin();
     imu.initialize();
 
+    if (!imu.testConnection()) {
+    Serial.println("MPU6050 not detected.");
+        while (true) {
+            delay(1000);
+        }
+    }
+
     // Один логічний сенсор має три компоненти X/Y/Z.
 
     // One logical sensor contains the three X/Y/Z components.

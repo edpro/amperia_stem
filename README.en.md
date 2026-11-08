@@ -221,7 +221,7 @@ Examples are located in the [`examples`](examples/) directory. The recommended a
 | `04_TemperatureSensor` | using DHT11 as a custom temperature sensor for the multimeter | beginner |
 | `05_AgentTemperatureSensor` | automatic measurement through `AgentSensor` and a callback function | advanced |
 | `06_GateSensor` | reading a gate sensor and forwarding selected measurements | beginner |
-| `07_FourPinStateSensor` | creating a custom multi-component sensor | beginner |
+| `07_ThreePinStateSensor` | creating a custom multi-component sensor | beginner |
 | `08_ForwardSensorToMultimeter` | generic forwarding of an external sensor to the multimeter | advanced |
 | `09_ForwardSensorWithDHT11` | combining an external Amperia STEM sensor with a local DHT11 | advanced |
 | `10_IfElseCondition` | reacting to a measured value using `if` / `else` | beginner |

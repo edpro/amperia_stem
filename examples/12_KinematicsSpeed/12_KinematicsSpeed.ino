@@ -25,11 +25,11 @@
 
 #include <AmperiaSTEM.h>
 
-// Довжина об'єкта, що перетинає ворота, у метрах.
+// Віддаль між лазерами воріт, що перетинає ворота, у метрах.
 
 // Length of the object crossing the gate, in meters.
 
-constexpr float objectDistance = 0.05; // 0.05 м = 5 см
+constexpr float gateDistance  = 0.05; // 0.05 м = 5 см
 
                                       // 0.05 m = 5 cm
 
@@ -47,7 +47,6 @@ float getTravelTime()
 
     if (sensor == nullptr) {
         return -1000.0f; // Сигнальне значення: від'ємний час прольоту неможливий
-
                          // Sentinel value: a negative travel time is impossible
     }
 
@@ -69,7 +68,7 @@ bool doMeasurement()
         // Обчислюємо швидкість за формулою v = d / t.
 
         // Calculate speed using v = d / t.
-        float speed = objectDistance / travelTime;
+        float speed = gateDistance / travelTime;
 
         speedSensor.publish(speed);
 

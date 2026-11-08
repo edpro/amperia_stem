@@ -129,7 +129,6 @@ bool doMeasurement()
 
     calibratedMag.publish(diffX, diffY, diffZ, diffMag);
 
-.
     Serial.print("Відносне поле [mkT] -> X: "); Serial.print(diffX);
     Serial.print(" | Y: "); Serial.print(diffY);
     Serial.print(" | Z: "); Serial.print(diffZ);

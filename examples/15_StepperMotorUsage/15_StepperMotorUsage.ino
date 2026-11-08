@@ -33,10 +33,10 @@ void setup() {
     delay(200);
     Serial.println("Stepper Example — using default shield pins");
 
-    // Встановлюємо початкову швидкість у обертах за хвилину.
+    // Встановлюємо швидкість 5 об/хв для 28BYJ-48 з комплекту.
 
-    // Set the initial speed in RPM.
-    stepper.setSpeed(60);
+    // Set 5 RPM for the included 28BYJ-48 motor.
+    stepper.setSpeed(5);
 }
 
 void loop() {

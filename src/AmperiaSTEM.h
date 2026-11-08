@@ -37,13 +37,15 @@ public:
         _motor.setSpeed(rpm);
     }
 
-    /** Constructor using shield pin defaults */
+    // Shield default: 28BYJ-48 in four-step (full-step) mode.
+    // About 2048 steps per output-shaft revolution; 5 RPM is a safe start.
     AmpStepper()
         : AmpStepper(
             amperia::board::unoR4Wifi::kStepperIn1Pin,
             amperia::board::unoR4Wifi::kStepperIn3Pin,
             amperia::board::unoR4Wifi::kStepperIn2Pin,
-            amperia::board::unoR4Wifi::kStepperIn4Pin)
+            amperia::board::unoR4Wifi::kStepperIn4Pin,
+            2048, 5)
     {}
 
     /** Move `steps` steps forward (+) or backward (−). Blocking. */

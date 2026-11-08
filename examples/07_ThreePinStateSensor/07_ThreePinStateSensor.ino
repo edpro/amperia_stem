@@ -49,7 +49,7 @@ int32_t readLogicLevel(uint8_t pin)
 
 void setup()
 {
-    pinMode(2, INPUT_PULLUP);
+    pinMode(10, INPUT_PULLUP);
     pinMode(A0, INPUT_PULLUP);
     pinMode(A1, INPUT_PULLUP);
 
@@ -66,7 +66,7 @@ void loop()
     // Передаємо на мультиметр стан кожного входу окремо.
 
     // Publish the state of each input as a separate value.
-    pinStateSensor.set(0, readLogicLevel(2));
+    pinStateSensor.set(0, readLogicLevel(10));
     pinStateSensor.set(1, readLogicLevel(A0));
     pinStateSensor.set(2, readLogicLevel(A1));
     pinStateSensor.publish();
