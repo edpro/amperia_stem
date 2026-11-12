@@ -47,7 +47,7 @@ AmperiaBridge display(sensors); // Передає прочитані дані н
  */
 float getPreciseTemperature()
 {
-    auto* sensor = sensors.findSensor("PT100");
+    auto* sensor = sensors.findSensor("Temperature");
 
     if (sensor == nullptr) {
         return -1000.0f; // Значення поза робочим діапазоном PT100
@@ -112,7 +112,7 @@ void setup() {
 
     // Зчитуємо опис підключених логічних сенсорів.
     // Discover the logical sensors reported by the external device.
-    if (!sensors.discover() || sensors.findSensor("PT100") == nullptr) {
+    if (!sensors.discover() || sensors.findSensor("Temperature") == nullptr) {
         Serial.println("PT100 sensor was not detected.");
         return;
     }
